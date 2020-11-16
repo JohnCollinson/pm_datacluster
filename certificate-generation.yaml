@@ -1,0 +1,21 @@
+version: '3.5'
+
+services:
+  setup:
+    image: eventstore/es-gencert-cli:1.0.2
+    entrypoint: bash
+    user: "1000:1000"
+    command: >
+      -c "mkdir -p ./certs && cd /certs
+      && es-gencert-cli create-ca
+      && es-gencert-cli create-node -out ./node1 --dns-names node1.eventstore
+      && es-gencert-cli create-node -out ./node2 --dns-names node2.eventstore
+      && es-gencert-cli create-node -out ./node3 --dns-names node3.eventstore
+      && es-gencert-cli create-node -out ./node4 --dns-names node4.eventstore
+      && es-gencert-cli create-node -out ./node5 --dns-names node5.eventstore
+      && find . -type f -print0 | xargs -0 chmod 666"
+    container_name: setup
+    volumes:
+      - ./certs:/certs
+
+
